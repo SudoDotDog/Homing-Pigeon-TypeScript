@@ -102,6 +102,7 @@ export class HomingPigeon {
 
             return {
                 proceed: false,
+                missed: validateResult.missed,
                 succeed: [],
                 validateFailed: validateResult.failed ?? [],
                 executeFailed: [],
@@ -111,7 +112,7 @@ export class HomingPigeon {
 
         const succeed: string[] = [];
         const failed: string[] = [];
-        const errors: Record<string, any> = [];
+        const errors: Record<string, any> = {};
 
         for (const trigger of validateResult.succeed) {
 
@@ -135,6 +136,7 @@ export class HomingPigeon {
 
         return {
             proceed: true,
+            missed: validateResult.missed,
             succeed,
             validateFailed: validateResult.failed ?? [],
             executeFailed: failed,

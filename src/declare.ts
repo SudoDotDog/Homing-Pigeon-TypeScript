@@ -29,6 +29,7 @@ export type ValidateResult = {
 export type ExecuteResult = {
 
     readonly proceed: boolean;
+    readonly missed: string[];
     readonly succeed: string[];
     readonly validateFailed: string[];
     readonly executeFailed: string[];
