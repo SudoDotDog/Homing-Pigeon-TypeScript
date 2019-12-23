@@ -38,6 +38,16 @@ export class HomingPigeon {
 
     public validate(activity: Activity): ValidateResult {
 
+        if (!activity) {
+            return {
+                valid: false,
+                shouldProceed: false,
+                succeed: [],
+                failed: [],
+                missed: [],
+            };
+        }
+
         const triggers: string[] = activity.triggers;
         if (!Array.isArray(triggers)) {
             return {
