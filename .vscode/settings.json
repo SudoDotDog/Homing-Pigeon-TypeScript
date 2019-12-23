@@ -1,0 +1,11 @@
+{
+    "cSpell.words": [
+        "RMRF",
+        "WMXPY",
+        "codecov",
+        "sudoo",
+        "triforce",
+        "tshook"
+    ],
+    "tslint.configFile": "typescript/tslint.json"
+}

@@ -1,0 +1,41 @@
+{
+  "name": "homing-pigeon",
+  "version": "0.0.0",
+  "description": ":penguin: Messenger",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SudoDotDog/Homing-Pigeon-TypeScript.git"
+  },
+  "keywords": [
+    "Homing Pigeon"
+  ],
+  "author": "WMXPY",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SudoDotDog/Homing-Pigeon-TypeScript/issues"
+  },
+  "homepage": "https://github.com/SudoDotDog/Homing-Pigeon-TypeScript#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@sudoo/io": "^1.6.1",
+    "@sudoo/triforce": "^2.0.4"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "instrument": true,
+    "reporter": [
+      "json",
+      "text-summary"
+    ],
+    "report-dir": "coverage",
+    "require": [
+      "./test/tshook.js"
+    ],
+    "sourceMap": true
+  }
+}
