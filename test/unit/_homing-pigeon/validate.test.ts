@@ -36,4 +36,72 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
             missed: [],
         } as ValidateResult);
     });
+
+    it('should be able to validate - Sad Path', (): void => {
+
+        const moduleName: string = chance.string();
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module({
+            name: moduleName,
+            validate: () => false,
+            execute: async () => true,
+        });
+
+        const validateResult: ValidateResult = instance.validate(createMockActivity(chance, moduleName));
+
+        expect(validateResult).to.be.deep.equal({
+            valid: false,
+            shouldProceed: true,
+            succeed: [],
+            failed: [moduleName],
+            missed: [],
+        } as ValidateResult);
+    });
+
+    it('should be able to validate - Sad Required Path', (): void => {
+
+        const moduleName: string = chance.string();
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module({
+            name: moduleName,
+            required: true,
+            validate: () => false,
+            execute: async () => true,
+        });
+
+        const validateResult: ValidateResult = instance.validate(createMockActivity(chance, moduleName));
+
+        expect(validateResult).to.be.deep.equal({
+            valid: false,
+            shouldProceed: false,
+            succeed: [],
+            failed: [moduleName],
+            missed: [],
+        } as ValidateResult);
+    });
+
+    it('should be able to validate - Sad Missed Path', (): void => {
+
+        const moduleName: string = chance.string();
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module({
+            name: chance.string(),
+            required: true,
+            validate: () => false,
+            execute: async () => true,
+        });
+
+        const validateResult: ValidateResult = instance.validate(createMockActivity(chance, moduleName));
+
+        expect(validateResult).to.be.deep.equal({
+            valid: false,
+            shouldProceed: false,
+            succeed: [],
+            failed: [],
+            missed: [moduleName],
+        } as ValidateResult);
+    });
 });

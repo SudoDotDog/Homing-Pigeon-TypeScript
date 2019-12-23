@@ -49,7 +49,7 @@ export class HomingPigeon {
             };
         }
 
-        let shouldProceed: boolean = true;
+        let valid: boolean = true;
         const succeed: string[] = [];
         const failed: string[] = [];
         for (const trigger of triggers) {
@@ -79,7 +79,7 @@ export class HomingPigeon {
                         missed: [],
                     };
                 }
-                shouldProceed = false;
+                valid = false;
             } else {
 
                 succeed.push(trigger);
@@ -87,8 +87,8 @@ export class HomingPigeon {
         }
 
         return {
-            valid: true,
-            shouldProceed,
+            valid,
+            shouldProceed: true,
             succeed,
             failed,
             missed: [],
