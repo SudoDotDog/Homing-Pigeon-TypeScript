@@ -21,6 +21,11 @@ export class HomingPigeon {
         this._modules = new Map<string, IHomingPigeonModule>();
     }
 
+    public get length(): number {
+
+        return this._modules.size;
+    }
+
     public module(instance: IHomingPigeonModule): this {
 
         if (this._modules.has(instance.name)) {
