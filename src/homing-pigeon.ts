@@ -5,7 +5,7 @@
  */
 
 import { Activity } from "./activity";
-import { createValidateResult, IHomingPigeonModule, ValidateResult } from "./declare";
+import { createAbortedExecuteResult, ExecuteResult, IHomingPigeonModule, ValidateResult } from "./declare";
 
 export class HomingPigeon {
 
@@ -35,30 +35,45 @@ export class HomingPigeon {
 
         const triggers: string[] = activity.triggers;
         if (!Array.isArray(triggers)) {
-            return createValidateResult(false, false);
+            return { valid: false, shouldProceed: false };
         }
 
         let shouldProceed: boolean = true;
+        const failed: string[] = [];
         for (const trigger of triggers) {
 
             const target: IHomingPigeonModule | undefined = this._modules.get(trigger);
             if (!target) {
-                return createValidateResult(false, false);
+                return { valid: false, shouldProceed: false, missed: [trigger] };
             }
             const result: boolean = target.validate(activity);
             if (!result) {
                 if (target.required) {
-                    return createValidateResult(false, false);
+                    return { valid: false, shouldProceed: false, failed: [trigger] };
                 }
                 shouldProceed = false;
+                failed.push(trigger);
             }
         }
 
-        return createValidateResult(true, shouldProceed);
+        return {
+            valid: true,
+            shouldProceed,
+            failed,
+        };
     }
 
-    public async execute(activity: Activity): Promise<boolean> {
+    public async execute(activity: Activity): Promise<ExecuteResult> {
 
-        return true;
+        const validateResult: ValidateResult = this.validate(activity);
+        if (!validateResult.shouldProceed) {
+            return createAbortedExecuteResult();
+        }
+
+        const succeed: string[] = [];
+        const failed: string[] = [];
+        const errors: Record<string, any> = [];
+
+
     }
 }

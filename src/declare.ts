@@ -20,12 +20,35 @@ export type ValidateResult = {
 
     readonly valid: boolean;
     readonly shouldProceed: boolean;
+
+    readonly failed?: string[];
+    readonly missed?: string[];
 };
 
-export const createValidateResult = (valid: boolean, shouldProceed: boolean): ValidateResult => {
+export type ExecuteResult = {
+
+    readonly proceed: boolean;
+    readonly succeed: string[];
+    readonly failed: string[];
+    readonly errors: Record<string, any>;
+};
+
+export const createProceedExecuteResult = (succeed: string[], failed: string[], errors: Record<string, any>): ExecuteResult => {
 
     return {
-        valid,
-        shouldProceed,
+        proceed: true,
+        succeed,
+        failed,
+        errors,
+    };
+};
+
+export const createAbortedExecuteResult = (): ExecuteResult => {
+
+    return {
+        proceed: false,
+        succeed: [],
+        failed: [],
+        errors: {},
     };
 };
