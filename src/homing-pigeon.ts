@@ -5,7 +5,7 @@
  */
 
 import { Activity } from "./activity";
-import { createAbortedExecuteResult, ExecuteResult, IHomingPigeonModule, ValidateResult } from "./declare";
+import { ExecuteResult, IHomingPigeonModule, ValidateResult } from "./declare";
 
 export class HomingPigeon {
 
@@ -35,30 +35,48 @@ export class HomingPigeon {
 
         const triggers: string[] = activity.triggers;
         if (!Array.isArray(triggers)) {
-            return { valid: false, shouldProceed: false };
+            return { valid: false, shouldProceed: false, succeed: [] };
         }
 
         let shouldProceed: boolean = true;
+        const succeed: string[] = [];
         const failed: string[] = [];
         for (const trigger of triggers) {
 
             const target: IHomingPigeonModule | undefined = this._modules.get(trigger);
             if (!target) {
-                return { valid: false, shouldProceed: false, missed: [trigger] };
+
+                return {
+                    valid: false,
+                    shouldProceed: false,
+                    succeed,
+                    missed: [trigger],
+                };
             }
+
             const result: boolean = target.validate(activity);
             if (!result) {
+
+                failed.push(trigger);
                 if (target.required) {
-                    return { valid: false, shouldProceed: false, failed: [trigger] };
+                    return {
+                        valid: false,
+                        shouldProceed: false,
+                        succeed,
+                        failed,
+                    };
                 }
                 shouldProceed = false;
-                failed.push(trigger);
+            } else {
+
+                succeed.push(trigger);
             }
         }
 
         return {
             valid: true,
             shouldProceed,
+            succeed,
             failed,
         };
     }
@@ -67,13 +85,54 @@ export class HomingPigeon {
 
         const validateResult: ValidateResult = this.validate(activity);
         if (!validateResult.shouldProceed) {
-            return createAbortedExecuteResult();
+
+            return {
+                proceed: false,
+                succeed: [],
+                validateFailed: validateResult.failed ?? [],
+                executeFailed: [],
+                errors: {},
+            };
         }
 
         const succeed: string[] = [];
         const failed: string[] = [];
         const errors: Record<string, any> = [];
 
+        for (const trigger of validateResult.succeed) {
 
+            const target: IHomingPigeonModule = this.assertModule(trigger);
+
+            try {
+
+                const result: boolean = await target.execute(activity);
+
+                if (result) {
+                    succeed.push(trigger);
+                } else {
+                    failed.push(trigger);
+                }
+            } catch (error) {
+
+                failed.push(trigger);
+                errors[trigger] = error;
+            }
+        }
+
+        return {
+            proceed: true,
+            succeed,
+            validateFailed: validateResult.failed ?? [],
+            executeFailed: failed,
+            errors,
+        };
+    }
+
+    public assertModule(trigger: string): IHomingPigeonModule {
+
+        if (this._modules.has(trigger)) {
+            return this._modules.get(trigger) as IHomingPigeonModule;
+        }
+        throw new Error('[Homing-Pigeon] Undefined Module');
     }
 }
