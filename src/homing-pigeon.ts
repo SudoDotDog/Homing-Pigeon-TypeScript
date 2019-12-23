@@ -40,7 +40,13 @@ export class HomingPigeon {
 
         const triggers: string[] = activity.triggers;
         if (!Array.isArray(triggers)) {
-            return { valid: false, shouldProceed: false, succeed: [] };
+            return {
+                valid: false,
+                shouldProceed: false,
+                succeed: [],
+                failed: [],
+                missed: [],
+            };
         }
 
         let shouldProceed: boolean = true;
@@ -55,6 +61,7 @@ export class HomingPigeon {
                     valid: false,
                     shouldProceed: false,
                     succeed,
+                    failed,
                     missed: [trigger],
                 };
             }
@@ -69,6 +76,7 @@ export class HomingPigeon {
                         shouldProceed: false,
                         succeed,
                         failed,
+                        missed: [],
                     };
                 }
                 shouldProceed = false;
@@ -83,6 +91,7 @@ export class HomingPigeon {
             shouldProceed,
             succeed,
             failed,
+            missed: [],
         };
     }
 
