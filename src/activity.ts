@@ -4,14 +4,16 @@
  * @description Activity
  */
 
-export class Activity {
+export type Activity = {
 
-    public static create() {
+    readonly triggers: string[];
 
-        return new Activity();
-    }
+    readonly to: Record<string, any>;
+    readonly identifier: string;
 
-    private constructor() {
+    readonly title: string;
+    readonly content: string;
+    readonly link: string;
 
-    }
-}
+    readonly extras?: Record<string, any>;
+};
