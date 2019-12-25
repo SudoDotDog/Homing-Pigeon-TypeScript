@@ -26,13 +26,13 @@ export class HomingPigeon {
         return this._modules.size;
     }
 
-    public module(instance: IHomingPigeonModule): this {
+    public module(moduleName: string, instance: IHomingPigeonModule): this {
 
-        if (this._modules.has(instance.name)) {
+        if (this._modules.has(moduleName)) {
             throw new Error('[Homing-Pigeon] Duplicated Module Name');
         }
 
-        this._modules.set(instance.name, instance);
+        this._modules.set(moduleName, instance);
         return this;
     }
 
@@ -80,7 +80,7 @@ export class HomingPigeon {
             if (!result) {
 
                 failed.push(trigger);
-                if (target.required) {
+                if (target.shouldAbort && target.shouldAbort(activity)) {
                     return {
                         valid: false,
                         shouldProceed: false,

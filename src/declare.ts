@@ -8,7 +8,7 @@ import { Activity } from "./activity";
 
 export interface IHomingPigeonModule {
 
-    shouldAbort(activity: Activity): boolean;
+    shouldAbort?(activity: Activity): boolean;
     validate(activity: Activity): boolean;
     execute(activity: Activity): Promise<boolean>;
 }
