@@ -19,8 +19,7 @@ describe('Given {HomingPigeon} Class', (): void => {
 
         const instance: HomingPigeon = HomingPigeon.create();
 
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => true,
             execute: async () => true,
         });

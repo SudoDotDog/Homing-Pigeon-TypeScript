@@ -21,8 +21,7 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         let count: number = 0;
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => true,
             execute: async () => {
                 count++;
@@ -49,8 +48,7 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         let count: number = 0;
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => false,
             execute: async () => {
                 count++;
@@ -77,9 +75,8 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         let count: number = 0;
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
-            required: true,
+        instance.module(moduleName, {
+            shouldAbort: () => true,
             validate: () => false,
             execute: async () => {
                 count++;
@@ -106,8 +103,7 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         let count: number = 0;
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => true,
             execute: async () => {
                 count++;
@@ -135,8 +131,7 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         let count: number = 0;
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => true,
             execute: async () => {
                 count++;
@@ -165,8 +160,7 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         let count: number = 0;
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: chance.string(),
+        instance.module(chance.string(), {
             validate: () => true,
             execute: async () => {
                 count++;

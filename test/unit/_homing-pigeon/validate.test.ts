@@ -20,8 +20,7 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         const moduleName: string = chance.string();
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => true,
             execute: async () => true,
         });
@@ -42,8 +41,7 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         const moduleName: string = chance.string();
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
+        instance.module(moduleName, {
             validate: () => false,
             execute: async () => true,
         });
@@ -64,9 +62,8 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         const moduleName: string = chance.string();
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: moduleName,
-            required: true,
+        instance.module(moduleName, {
+            shouldAbort: () => true,
             validate: () => false,
             execute: async () => true,
         });
@@ -87,9 +84,8 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         const moduleName: string = chance.string();
 
         const instance: HomingPigeon = HomingPigeon.create();
-        instance.module({
-            name: chance.string(),
-            required: true,
+        instance.module(chance.string(), {
+            shouldAbort: () => true,
             validate: () => false,
             execute: async () => true,
         });
