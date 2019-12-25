@@ -8,10 +8,7 @@ import { Activity } from "./activity";
 
 export interface IHomingPigeonModule {
 
-    readonly name: string;
-
-    readonly required?: boolean;
-
+    shouldAbort(activity: Activity): boolean;
     validate(activity: Activity): boolean;
     execute(activity: Activity): Promise<boolean>;
 }
