@@ -44,6 +44,86 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         } as ExecuteResult);
     });
 
+    it('should be able to execute - Happy Path Double', async (): Promise<void> => {
+
+        const moduleName: string = chance.string();
+        let count: number = 0;
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module(moduleName, {
+            validate: () => true,
+            execute: async () => {
+                count++;
+                return true;
+            },
+        }).module(moduleName, {
+            validate: () => true,
+            execute: async () => {
+                count++;
+                return true;
+            },
+        });
+
+        const executeResult: ExecuteResult = await instance.execute(createMockActivity(chance, moduleName));
+
+        expect(count).to.be.equal(2);
+        expect(executeResult).to.be.deep.equal({
+            proceed: true,
+            missed: [],
+            succeed: {
+                [moduleName]: 2,
+            },
+            validateFailed: {},
+            executeFailed: {},
+            errors: {},
+        } as ExecuteResult);
+    });
+
+    it('should be able to execute - Mixed Path', async (): Promise<void> => {
+
+        const moduleName: string = chance.string();
+        let count: number = 0;
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module(moduleName, {
+            validate: () => true,
+            execute: async () => {
+                count++;
+                return true;
+            },
+        }).module(moduleName, {
+            validate: () => true,
+            execute: async () => {
+                count++;
+                return false;
+            },
+        }).module(moduleName, {
+            validate: () => false,
+            execute: async () => {
+                count++;
+                return false;
+            },
+        });
+
+        const executeResult: ExecuteResult = await instance.execute(createMockActivity(chance, moduleName));
+
+        expect(count).to.be.equal(2);
+        expect(executeResult).to.be.deep.equal({
+            proceed: true,
+            missed: [],
+            succeed: {
+                [moduleName]: 1,
+            },
+            validateFailed: {
+                [moduleName]: 1,
+            },
+            executeFailed: {
+                [moduleName]: 1,
+            },
+            errors: {},
+        } as ExecuteResult);
+    });
+
     it('should be able to execute - Validate Failed Path', async (): Promise<void> => {
 
         const moduleName: string = chance.string();

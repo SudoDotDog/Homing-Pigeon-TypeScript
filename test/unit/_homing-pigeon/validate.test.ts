@@ -38,6 +38,60 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         } as ValidateResult);
     });
 
+    it('should be able to validate multiple - Happy Path Double', (): void => {
+
+        const moduleName: string = chance.string();
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module(moduleName, {
+            validate: () => true,
+            execute: async () => true,
+        }).module(moduleName, {
+            validate: () => true,
+            execute: async () => true,
+        });
+
+        const validateResult: ValidateResult = instance.validate(createMockActivity(chance, moduleName));
+
+        expect(validateResult).to.be.deep.equal({
+            valid: true,
+            shouldProceed: true,
+            succeed: {
+                [moduleName]: 2,
+            },
+            failed: {},
+            missed: [],
+        } as ValidateResult);
+    });
+
+    it('should be able to validate multiple - Mixed Path', (): void => {
+
+        const moduleName: string = chance.string();
+
+        const instance: HomingPigeon = HomingPigeon.create();
+        instance.module(moduleName, {
+            validate: () => true,
+            execute: async () => true,
+        }).module(moduleName, {
+            validate: () => false,
+            execute: async () => true,
+        });
+
+        const validateResult: ValidateResult = instance.validate(createMockActivity(chance, moduleName));
+
+        expect(validateResult).to.be.deep.equal({
+            valid: false,
+            shouldProceed: true,
+            succeed: {
+                [moduleName]: 1,
+            },
+            failed: {
+                [moduleName]: 1,
+            },
+            missed: [],
+        } as ValidateResult);
+    });
+
     it('should be able to validate - Sad Path', (): void => {
 
         const moduleName: string = chance.string();
