@@ -17,6 +17,7 @@ export const createMockActivity = (chance: Chance.Chance, ...triggers: string[])
         identifier: chance.string(),
 
         title: chance.sentence(),
+        subject: chance.sentence(),
         content: chance.string(),
         link: chance.url(),
     };
