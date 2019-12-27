@@ -130,6 +130,10 @@ export class HomingPigeon {
 
             for (const target of targets) {
 
+                if (!target.validate(activity)) {
+                    continue;
+                }
+
                 try {
 
                     const result: boolean = await target.execute(activity);
