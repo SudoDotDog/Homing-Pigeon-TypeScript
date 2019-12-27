@@ -30,8 +30,10 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         expect(validateResult).to.be.deep.equal({
             valid: true,
             shouldProceed: true,
-            succeed: [moduleName],
-            failed: [],
+            succeed: {
+                [moduleName]: 1,
+            },
+            failed: {},
             missed: [],
         } as ValidateResult);
     });
@@ -51,8 +53,10 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         expect(validateResult).to.be.deep.equal({
             valid: false,
             shouldProceed: true,
-            succeed: [],
-            failed: [moduleName],
+            succeed: {},
+            failed: {
+                [moduleName]: 1,
+            },
             missed: [],
         } as ValidateResult);
     });
@@ -73,8 +77,10 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         expect(validateResult).to.be.deep.equal({
             valid: false,
             shouldProceed: false,
-            succeed: [],
-            failed: [moduleName],
+            succeed: {},
+            failed: {
+                [moduleName]: 1,
+            },
             missed: [],
         } as ValidateResult);
     });
@@ -95,8 +101,8 @@ describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
         expect(validateResult).to.be.deep.equal({
             valid: false,
             shouldProceed: false,
-            succeed: [],
-            failed: [],
+            succeed: {},
+            failed: {},
             missed: [moduleName],
         } as ValidateResult);
     });

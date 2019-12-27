@@ -35,9 +35,11 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         expect(executeResult).to.be.deep.equal({
             proceed: true,
             missed: [],
-            succeed: [moduleName],
-            validateFailed: [],
-            executeFailed: [],
+            succeed: {
+                [moduleName]: 1,
+            },
+            validateFailed: {},
+            executeFailed: {},
             errors: {},
         } as ExecuteResult);
     });
@@ -62,9 +64,11 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         expect(executeResult).to.be.deep.equal({
             proceed: true,
             missed: [],
-            succeed: [],
-            validateFailed: [moduleName],
-            executeFailed: [],
+            succeed: {},
+            validateFailed: {
+                [moduleName]: 1,
+            },
+            executeFailed: {},
             errors: {},
         } as ExecuteResult);
     });
@@ -90,9 +94,11 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         expect(executeResult).to.be.deep.equal({
             proceed: false,
             missed: [],
-            succeed: [],
-            validateFailed: [moduleName],
-            executeFailed: [],
+            succeed: {},
+            validateFailed: {
+                [moduleName]: 1,
+            },
+            executeFailed: {},
             errors: {},
         } as ExecuteResult);
     });
@@ -117,9 +123,11 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         expect(executeResult).to.be.deep.equal({
             proceed: true,
             missed: [],
-            succeed: [],
-            validateFailed: [],
-            executeFailed: [moduleName],
+            succeed: {},
+            validateFailed: {},
+            executeFailed: {
+                [moduleName]: 1,
+            },
             errors: {},
         } as ExecuteResult);
     });
@@ -145,9 +153,11 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         expect(executeResult).to.be.deep.equal({
             proceed: true,
             missed: [],
-            succeed: [],
-            validateFailed: [],
-            executeFailed: [moduleName],
+            succeed: {},
+            validateFailed: {},
+            executeFailed: {
+                [moduleName]: 1,
+            },
             errors: {
                 [moduleName]: message,
             },
@@ -174,9 +184,9 @@ describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
         expect(executeResult).to.be.deep.equal({
             proceed: false,
             missed: [moduleName],
-            succeed: [],
-            validateFailed: [],
-            executeFailed: [],
+            succeed: {},
+            validateFailed: {},
+            executeFailed: {},
             errors: {},
         } as ExecuteResult);
     });
