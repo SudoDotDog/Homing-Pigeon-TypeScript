@@ -4,6 +4,17 @@
  * @description Activity
  */
 
+export type ActivityFile = {
+
+    readonly filename: string;
+    readonly contentType?: string;
+    readonly encoding?: string;
+} & ({
+    readonly content: string;
+} | {
+    readonly path: string;
+});
+
 export type Activity = {
 
     readonly triggers: string[];
@@ -16,5 +27,6 @@ export type Activity = {
     readonly link: string;
     readonly content: string;
 
+    readonly files?: ActivityFile[];
     readonly extras?: Record<string, any>;
 };
