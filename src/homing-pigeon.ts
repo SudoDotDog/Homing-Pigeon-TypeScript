@@ -14,11 +14,11 @@ export class HomingPigeon {
         return new HomingPigeon();
     }
 
-    private readonly _modules: Map<string, IHomingPigeonModule>;
+    private readonly _modules: Map<string, IHomingPigeonModule[]>;
 
     private constructor() {
 
-        this._modules = new Map<string, IHomingPigeonModule>();
+        this._modules = new Map<string, IHomingPigeonModule[]>();
     }
 
     public get length(): number {
@@ -28,11 +28,7 @@ export class HomingPigeon {
 
     public module(moduleName: string, instance: IHomingPigeonModule): this {
 
-        if (this._modules.has(moduleName)) {
-            throw new Error('[Homing-Pigeon] Duplicated Module Name');
-        }
-
-        this._modules.set(moduleName, instance);
+        this._modules.set(moduleName, [...this.getModules(moduleName), instance]);
         return this;
     }
 
@@ -42,8 +38,8 @@ export class HomingPigeon {
             return {
                 valid: false,
                 shouldProceed: false,
-                succeed: [],
-                failed: [],
+                succeed: {},
+                failed: {},
                 missed: [],
             };
         }
@@ -53,19 +49,19 @@ export class HomingPigeon {
             return {
                 valid: false,
                 shouldProceed: false,
-                succeed: [],
-                failed: [],
+                succeed: {},
+                failed: {},
                 missed: [],
             };
         }
 
         let valid: boolean = true;
-        const succeed: string[] = [];
-        const failed: string[] = [];
+        const succeed: Record<string, number> = {};
+        const failed: Record<string, number> = {};
         for (const trigger of triggers) {
 
-            const target: IHomingPigeonModule | undefined = this._modules.get(trigger);
-            if (!target) {
+            const targets: IHomingPigeonModule[] = this.getModules(trigger);
+            if (targets.length === 0) {
 
                 return {
                     valid: false,
@@ -76,23 +72,26 @@ export class HomingPigeon {
                 };
             }
 
-            const result: boolean = target.validate(activity);
-            if (!result) {
+            for (const target of targets) {
 
-                failed.push(trigger);
-                if (target.shouldAbort && target.shouldAbort(activity)) {
-                    return {
-                        valid: false,
-                        shouldProceed: false,
-                        succeed,
-                        failed,
-                        missed: [],
-                    };
+                const result: boolean = target.validate(activity);
+                if (!result) {
+
+                    failed[trigger] = (failed[trigger] ?? 0) + 1;
+                    if (target.shouldAbort && target.shouldAbort(activity)) {
+                        return {
+                            valid: false,
+                            shouldProceed: false,
+                            succeed,
+                            failed,
+                            missed: [],
+                        };
+                    }
+                    valid = false;
+                } else {
+
+                    succeed[trigger] = (succeed[trigger] ?? 0) + 1;
                 }
-                valid = false;
-            } else {
-
-                succeed.push(trigger);
             }
         }
 
@@ -113,34 +112,38 @@ export class HomingPigeon {
             return {
                 proceed: false,
                 missed: validateResult.missed,
-                succeed: [],
-                validateFailed: validateResult.failed ?? [],
-                executeFailed: [],
+                succeed: {},
+                validateFailed: validateResult.failed ?? {},
+                executeFailed: {},
                 errors: {},
             };
         }
 
-        const succeed: string[] = [];
-        const failed: string[] = [];
+        const succeed: Record<string, number> = {};
+        const failed: Record<string, number> = {};
         const errors: Record<string, any> = {};
 
-        for (const trigger of validateResult.succeed) {
+        const succeedTriggers: string[] = Object.keys(validateResult.succeed);
+        for (const trigger of succeedTriggers) {
 
-            const target: IHomingPigeonModule = this.assertModule(trigger);
+            const targets: IHomingPigeonModule[] = this.getModules(trigger);
 
-            try {
+            for (const target of targets) {
 
-                const result: boolean = await target.execute(activity);
+                try {
 
-                if (result) {
-                    succeed.push(trigger);
-                } else {
-                    failed.push(trigger);
+                    const result: boolean = await target.execute(activity);
+
+                    if (result) {
+                        succeed[trigger] = (succeed[trigger] ?? 0) + 1;
+                    } else {
+                        failed[trigger] = (failed[trigger] ?? 0) + 1;
+                    }
+                } catch (error) {
+
+                    failed[trigger] = (failed[trigger] ?? 0) + 1;
+                    errors[trigger] = error;
                 }
-            } catch (error) {
-
-                failed.push(trigger);
-                errors[trigger] = error;
             }
         }
 
@@ -148,17 +151,17 @@ export class HomingPigeon {
             proceed: true,
             missed: validateResult.missed,
             succeed,
-            validateFailed: validateResult.failed ?? [],
+            validateFailed: validateResult.failed ?? {},
             executeFailed: failed,
             errors,
         };
     }
 
-    public assertModule(trigger: string): IHomingPigeonModule {
+    public getModules(trigger: string): IHomingPigeonModule[] {
 
         if (this._modules.has(trigger)) {
-            return this._modules.get(trigger) as IHomingPigeonModule;
+            return this._modules.get(trigger) as IHomingPigeonModule[];
         }
-        throw new Error('[Homing-Pigeon] Undefined Module');
+        return [];
     }
 }
