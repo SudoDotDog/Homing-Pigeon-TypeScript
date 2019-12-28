@@ -24,13 +24,34 @@ export class HomingPigeon {
         this._modules = new Map<string, IHomingPigeonModule[]>();
     }
 
-    public get length(): number {
+    public get keys(): string[] {
+        return [...this._modules.keys()];
+    }
+    public get size(): number {
         return this._modules.size;
+    }
+
+    public get length(): number {
+
+        const keys: string[] = this.keys;
+        return keys.reduce((previous: number, current: string) => {
+            const modules: IHomingPigeonModule[] = this.getModules(current);
+            return previous + modules.length;
+        }, 0);
     }
 
     public module(moduleName: string, instance: IHomingPigeonModule): this {
 
-        this._modules.set(moduleName, [...this.getModules(moduleName), instance]);
+        const newModules: IHomingPigeonModule[] = [
+            ...this.getModules(moduleName),
+            instance,
+        ];
+        return this.replaceModule(moduleName, newModules);
+    }
+
+    public replaceModule(moduleName: string, instances: IHomingPigeonModule[]): this {
+
+        this._modules.set(moduleName, instances);
         return this;
     }
 
