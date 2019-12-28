@@ -6,6 +6,7 @@
 
 import { Activity } from "./activity";
 import { executeActivity } from "./core/execute";
+import { getModules } from "./core/util";
 import { validateActivity } from "./core/validate";
 import { ExecuteResult, IHomingPigeonModule, ValidateResult } from "./declare";
 
@@ -24,7 +25,6 @@ export class HomingPigeon {
     }
 
     public get length(): number {
-
         return this._modules.size;
     }
 
@@ -46,9 +46,6 @@ export class HomingPigeon {
 
     public getModules(trigger: string): IHomingPigeonModule[] {
 
-        if (this._modules.has(trigger)) {
-            return this._modules.get(trigger) as IHomingPigeonModule[];
-        }
-        return [];
+        return getModules(this._modules, trigger);
     }
 }

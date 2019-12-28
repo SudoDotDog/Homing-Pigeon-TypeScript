@@ -6,10 +6,14 @@
 
 import { IHomingPigeonModule } from "../declare";
 
-export const getModules = (modules: Map<string, IHomingPigeonModule[]>, moduleName: string): IHomingPigeonModule[] => {
+export const getModules = (
+    modules: Map<string, IHomingPigeonModule[]>,
+    moduleName: string,
+    defaultValue: IHomingPigeonModule[] = [],
+): IHomingPigeonModule[] => {
 
     if (modules.has(moduleName)) {
         return modules.get(moduleName) as IHomingPigeonModule[];
     }
-    return [];
+    return defaultValue;
 };
