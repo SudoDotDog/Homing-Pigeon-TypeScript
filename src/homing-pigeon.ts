@@ -5,6 +5,7 @@
  */
 
 import { Activity } from "./activity";
+import { validateActivity } from "./core/validate";
 import { ExecuteResult, IHomingPigeonModule, ValidateResult } from "./declare";
 
 export class HomingPigeon {
@@ -34,74 +35,7 @@ export class HomingPigeon {
 
     public validate(activity: Activity): ValidateResult {
 
-        if (!activity) {
-            return {
-                valid: false,
-                shouldProceed: false,
-                succeed: {},
-                failed: {},
-                missed: [],
-            };
-        }
-
-        const triggers: string[] = activity.triggers;
-        if (!Array.isArray(triggers)) {
-            return {
-                valid: false,
-                shouldProceed: false,
-                succeed: {},
-                failed: {},
-                missed: [],
-            };
-        }
-
-        let valid: boolean = true;
-        const succeed: Record<string, number> = {};
-        const failed: Record<string, number> = {};
-        for (const trigger of triggers) {
-
-            const targets: IHomingPigeonModule[] = this.getModules(trigger);
-            if (targets.length === 0) {
-
-                return {
-                    valid: false,
-                    shouldProceed: false,
-                    succeed,
-                    failed,
-                    missed: [trigger],
-                };
-            }
-
-            for (const target of targets) {
-
-                const result: boolean = target.validate(activity);
-                if (!result) {
-
-                    failed[trigger] = (failed[trigger] ?? 0) + 1;
-                    if (target.shouldAbort && target.shouldAbort(activity)) {
-                        return {
-                            valid: false,
-                            shouldProceed: false,
-                            succeed,
-                            failed,
-                            missed: [],
-                        };
-                    }
-                    valid = false;
-                } else {
-
-                    succeed[trigger] = (succeed[trigger] ?? 0) + 1;
-                }
-            }
-        }
-
-        return {
-            valid,
-            shouldProceed: true,
-            succeed,
-            failed,
-            missed: [],
-        };
+        return validateActivity(this._modules, activity);
     }
 
     public async execute(activity: Activity): Promise<ExecuteResult> {
