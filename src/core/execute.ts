@@ -6,7 +6,7 @@
 
 import { Activity } from "../activity";
 import { ExecuteResult, IHomingPigeonModule, ValidateResult } from "../declare";
-import { getModules } from "./util";
+import { getModules } from "../util";
 import { validateActivity } from "./validate";
 
 export const executeActivity = async (modules: Map<string, IHomingPigeonModule[]>, activity: Activity): Promise<ExecuteResult> => {
