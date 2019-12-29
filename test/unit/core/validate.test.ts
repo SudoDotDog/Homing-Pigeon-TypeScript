@@ -1,7 +1,7 @@
 /**
  * @author WMXPY
- * @namespace HomingPigeon
- * @description HomingPigeon Validate
+ * @namespace Core
+ * @description Validate
  * @override Unit
  */
 
