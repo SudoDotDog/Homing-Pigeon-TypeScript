@@ -11,9 +11,9 @@ import { ValidateResult } from '../../../src/declare';
 import { HomingPigeon } from '../../../src/homing-pigeon';
 import { createMockActivity } from '../../mock/activity';
 
-describe('Given {HomingPigeon} Class - [Validate] Function', (): void => {
+describe('Given [Validate] Core Function', (): void => {
 
-    const chance: Chance.Chance = new Chance('homing-pigeon-validate');
+    const chance: Chance.Chance = new Chance('homing-pigeon-core-validate');
 
     it('should be able to validate - Happy Path', (): void => {
 

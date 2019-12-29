@@ -11,9 +11,9 @@ import { ExecuteResult } from '../../../src/declare';
 import { HomingPigeon } from '../../../src/homing-pigeon';
 import { createMockActivity } from '../../mock/activity';
 
-describe('Given {HomingPigeon} Class - [Execute] Function', (): void => {
+describe('Given [Execute] Core Function', (): void => {
 
-    const chance: Chance.Chance = new Chance('homing-pigeon-validate');
+    const chance: Chance.Chance = new Chance('homing-pigeon-core-execute');
 
     it('should be able to execute - Happy Path', async (): Promise<void> => {
 
