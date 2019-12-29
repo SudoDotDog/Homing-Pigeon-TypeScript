@@ -28,5 +28,6 @@ export type Activity = {
     readonly content: string;
 
     readonly files?: ActivityFile[];
+    readonly properties?: Record<string, any>;
     readonly extras?: Record<string, any>;
 };
