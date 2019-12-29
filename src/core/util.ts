@@ -1,10 +1,10 @@
 /**
  * @author WMXPY
- * @namespace Homing Pigeon
+ * @namespace Core
  * @description Util
  */
 
-import { IHomingPigeonModule } from "./declare";
+import { IHomingPigeonModule } from "../declare";
 
 export const getModules = (
     modules: Map<string, IHomingPigeonModule[]>,

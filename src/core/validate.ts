@@ -6,7 +6,7 @@
 
 import { Activity } from "../activity";
 import { IHomingPigeonModule } from "../declare";
-import { getModules } from "../util";
+import { getModules } from "./util";
 
 export const validateActivity = (modules: Map<string, IHomingPigeonModule[]>, activity: Activity) => {
 
