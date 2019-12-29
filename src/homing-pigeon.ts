@@ -6,9 +6,9 @@
 
 import { Activity } from "./activity";
 import { executeActivity } from "./core/execute";
-import { getModules } from "./core/util";
 import { validateActivity } from "./core/validate";
 import { ExecuteResult, IHomingPigeonModule, ValidateResult } from "./declare";
+import { getModules } from "./util";
 
 export class HomingPigeon {
 
